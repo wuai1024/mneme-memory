@@ -1,10 +1,9 @@
 """
 Embedding module — wraps sentence-transformers for consistent interface.
 Supports custom cache folder via MODEL_CACHE env var.
-Automatically uses GPU (CUDA) if available.
+CPU-only (no GPU dependency required).
 """
 import os
-import torch
 import threading
 from functools import lru_cache
 from sentence_transformers import SentenceTransformer
@@ -16,7 +15,7 @@ MODEL_CACHE = os.environ.get("MODEL_CACHE", None)
 _model = None
 _model_lock = threading.Lock()
 
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+DEVICE = "cpu"
 
 
 def _get_model() -> SentenceTransformer:
@@ -38,7 +37,6 @@ def embed(texts: list[str]) -> list[list[float]]:
     """
     Returns list of embedding vectors, one per input text.
     Each vector is a list of floats (not a numpy array — JSON serializable).
-    Uses GPU automatically if CUDA is available.
     """
     model = _get_model()
     vectors = model.encode(texts, normalize_embeddings=True, convert_to_numpy=True)

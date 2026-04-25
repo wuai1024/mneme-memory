@@ -17,7 +17,7 @@
 - **会话摘要** — 对话级别摘要存储，支持跨会话上下文检索
 - **API Key 认证** — 全 API 无状态认证，适合内网部署
 - **单文件 SQLite** — 无外部数据库依赖，备份即备份一个 `.db` 文件
-- **GPU 加速** — 自动检测 CUDA，GPU 可用时自动调用；无 GPU 时优雅降级到 CPU
+- **轻量部署** — CPU-only，镜像体积小（< 500MB），任何 x86_64 机器直接运行
 
 ---
 
@@ -111,7 +111,7 @@ X-API-Key: your-secret-key-here
 │   ├── database.py      # SQLite + 向量检索
 │   ├── embedding.py     # sentence-transformers 封装
 │   └── models.py        # Pydantic 数据模型
-├── Dockerfile           # GPU 加速镜像，运行时自动降级 CPU
+├── Dockerfile           # CPU-only 轻量镜像
 ├── requirements.txt     # Python 依赖
 ├── docker-compose.yml   # Docker Compose 编排
 ├── .env.example         # 环境变量模板

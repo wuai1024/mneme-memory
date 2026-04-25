@@ -1,7 +1,7 @@
 FROM python:3.12-slim
 
 LABEL org.opencontainers.image.title="Mneme Memory Service"
-LABEL org.opencontainers.image.description="Semantic long-term memory service for AI agents — GPU-accelerated, auto-fallback to CPU"
+LABEL org.opencontainers.image.description="Semantic long-term memory service for AI agents — CPU-only, lightweight"
 LABEL org.opencontainers.image.source="https://github.com/wuai1024/mneme-memory"
 LABEL org.opencontainers.image.licenses="MIT"
 
@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && curl -sS https://bootstrap.pypa.io/get-pip.py | python3 \
     && rm -rf /var/lib/apt/lists/*
 
-# GPU-enabled torch: CUDA detected at runtime, auto-fallback to CPU if no GPU
+# CPU-only torch (no CUDA needed)
 RUN pip install --no-cache-dir torch
 
 # Install remaining deps
