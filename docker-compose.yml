@@ -1,0 +1,19 @@
+services:
+  mneme-memory:
+    image: ghcr.io/wuai1024/mneme-memory:latest
+    container_name: mneme-memory
+    restart: unless-stopped
+    ports:
+      - "33333:33333"
+    volumes:
+      - ./data:/data
+    environment:
+      - MEMORY_API_KEY=${MEMORY_API_KEY}
+      - EMBEDDING_MODEL=all-MiniLM-L6-v2
+      - SKIP_AUTH=false
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:33333/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
