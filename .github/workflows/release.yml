@@ -52,7 +52,7 @@ jobs:
 
   docker-hub:
     runs-on: ubuntu-latest
-    if: false  # Set to true and add DOCKERHUB_* secrets to enable
+    if: true
     steps:
       - uses: actions/checkout@v4
       - name: Set up Docker Buildx
