@@ -12,8 +12,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && curl -sS https://bootstrap.pypa.io/get-pip.py | python3 \
     && rm -rf /var/lib/apt/lists/*
 
-# CPU-only torch (no CUDA needed) — all architectures have prebuilt wheels
-RUN pip install --no-cache-dir torch
+# CPU-only torch — use official CPU-only index to avoid CUDA deps and build failures on arm
+RUN pip install --no-cache-dir --index-url https://download.pytorch.org/whl/cpu torch
 
 # Install remaining deps
 RUN pip install --no-cache-dir \
