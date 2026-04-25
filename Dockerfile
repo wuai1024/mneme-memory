@@ -1,7 +1,7 @@
-FROM python:3.12-slim
+FROM python:3.12
 
 LABEL org.opencontainers.image.title="Mneme Memory Service"
-LABEL org.opencontainers.image.description="Semantic long-term memory service for AI agents — CPU-only, lightweight"
+LABEL org.opencontainers.image.description="Semantic long-term memory service for AI agents — CPU-only, supports x86_64 / arm64 / armv7"
 LABEL org.opencontainers.image.source="https://github.com/wuai1024/mneme-memory"
 LABEL org.opencontainers.image.licenses="MIT"
 
@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && curl -sS https://bootstrap.pypa.io/get-pip.py | python3 \
     && rm -rf /var/lib/apt/lists/*
 
-# CPU-only torch (no CUDA needed)
+# CPU-only torch (no CUDA needed) — all architectures have prebuilt wheels
 RUN pip install --no-cache-dir torch
 
 # Install remaining deps
