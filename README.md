@@ -1,5 +1,9 @@
 # Mneme Memory Service
 
+[![Build & Release](https://github.com/wuai1024/mneme-memory/actions/workflows/release.yml/badge.svg)](https://github.com/wuai1024/mneme-memory/actions/workflows/release.yml)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/wuai1024/mneme-memory?sort=semver)](https://github.com/wuai1024/mneme-memory/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
 **语义持久化记忆服务** — 为 AI Agent 构建长期记忆的轻量解决方案。
 
 支持以「主体 → 谓词 → 对象」三分量存储事实，结合 sentence-transformers 向量嵌入和 SQLite，实现语义搜索与关键词检索双轨并行。
