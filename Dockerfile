@@ -1,7 +1,7 @@
 FROM python:3.12
 
 LABEL org.opencontainers.image.title="Mneme Memory Service"
-LABEL org.opencontainers.image.description="Semantic long-term memory service for AI agents — CPU-only, supports x86_64 / arm64 / armv7"
+LABEL org.opencontainers.image.description="Semantic long-term memory service for AI agents — CPU-only, supports x86_64 / arm64"
 LABEL org.opencontainers.image.source="https://github.com/wuai1024/mneme-memory"
 LABEL org.opencontainers.image.licenses="MIT"
 
@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && curl -sS https://bootstrap.pypa.io/get-pip.py | python3 \
     && rm -rf /var/lib/apt/lists/*
 
-# CPU-only torch — use official CPU-only index to avoid CUDA deps and build failures on arm
+# CPU-only torch — use official CPU-only index (x86_64 + arm64 only)
 RUN pip install --no-cache-dir --index-url https://download.pytorch.org/whl/cpu torch
 
 # Install remaining deps
