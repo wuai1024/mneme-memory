@@ -1,8 +1,7 @@
-ARG BASE_IMAGE=python:3.12-slim
-FROM ${BASE_IMAGE}
+FROM python:3.12-slim
 
 LABEL org.opencontainers.image.title="Mneme Memory Service"
-LABEL org.opencontainers.image.description="Semantic long-term memory service for AI agents"
+LABEL org.opencontainers.image.description="Semantic long-term memory service for AI agents — GPU-accelerated, auto-fallback to CPU"
 LABEL org.opencontainers.image.source="https://github.com/wuai1024/mneme-memory"
 LABEL org.opencontainers.image.licenses="MIT"
 
@@ -13,11 +12,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && curl -sS https://bootstrap.pypa.io/get-pip.py | python3 \
     && rm -rf /var/lib/apt/lists/*
 
-# CPU: torch from PyTorch CPU-only wheel index
-# GPU: torch from default PyPI (CUDA-enabled by default)
-ARG TORCH_INDEX=https://download.pytorch.org/whl/cpu
-ARG CUDA_DEPS=""
-RUN pip install --no-cache-dir torch --index-url ${TORCH_INDEX} ${CUDA_DEPS}
+# GPU-enabled torch: CUDA detected at runtime, auto-fallback to CPU if no GPU
+RUN pip install --no-cache-dir torch
 
 # Install remaining deps
 RUN pip install --no-cache-dir \
