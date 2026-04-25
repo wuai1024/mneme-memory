@@ -68,5 +68,5 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ github.repository_owner }}/mneme-memory:{{ github.ref_name }}
+            ${{ github.repository_owner }}/mneme-memory:${{ github.ref_name }}
             ${{ github.repository_owner }}/mneme-memory:latest
