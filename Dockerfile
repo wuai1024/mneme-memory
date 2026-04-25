@@ -1,4 +1,5 @@
-FROM python:3.12-slim
+ARG BASE_IMAGE=python:3.12-slim
+FROM ${BASE_IMAGE}
 
 LABEL org.opencontainers.image.title="Mneme Memory Service"
 LABEL org.opencontainers.image.description="Semantic long-term memory service for AI agents"
@@ -12,10 +13,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && curl -sS https://bootstrap.pypa.io/get-pip.py | python3 \
     && rm -rf /var/lib/apt/lists/*
 
-# Install CPU-only torch first (pre-cached wheel, no compilation)
-RUN pip install --no-cache-dir \
-        torch \
-        --index-url https://download.pytorch.org/whl/cpu
+# CPU: torch from PyTorch CPU-only wheel index
+# GPU: torch from default PyPI (CUDA-enabled by default)
+ARG TORCH_INDEX=https://download.pytorch.org/whl/cpu
+ARG CUDA_DEPS=""
+RUN pip install --no-cache-dir torch --index-url ${TORCH_INDEX} ${CUDA_DEPS}
 
 # Install remaining deps
 RUN pip install --no-cache-dir \

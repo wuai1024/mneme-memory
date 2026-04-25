@@ -5,8 +5,13 @@ on:
     tags:
       - 'v*'
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository_owner }}/mneme-memory
+
 jobs:
-  build:
+  # ── CPU variant ──────────────────────────────────────────────────────────────
+  build-cpu:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -22,7 +27,7 @@ jobs:
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v4
         with:
-          registry: ghcr.io
+          registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
@@ -30,23 +35,73 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ github.repository_owner }}/mneme-memory
+          images: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-cpu
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=raw,value=latest,enable={{is_default_branch}}
 
-      - name: Build and push
+      - name: Build CPU variant
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            BASE_IMAGE=python:3.12-slim
+            TORCH_INDEX=https://download.pytorch.org/whl/cpu
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  # Also push to Docker Hub if Docker Hub credentials are configured
+  # ── GPU (CUDA) variant ──────────────────────────────────────────────────────
+  build-gpu:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-gpu
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build GPU variant
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            BASE_IMAGE=nvidia/cuda:12.4-runtime-ubuntu22.04
+            TORCH_INDEX=https://download.pytorch.org/whl/cu124
+            CUDA_DEPS=libcusparse12 libcusolver12
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ── Docker Hub (optional) ───────────────────────────────────────────────────
   docker-hub:
     runs-on: ubuntu-latest
     if: false  # Set to true and add DOCKERHUB_* secrets to enable
