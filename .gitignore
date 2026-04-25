@@ -1,0 +1,4 @@
+data/
+app/__pycache__/
+venv/
+test_api.py
