@@ -9,6 +9,7 @@ WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         curl \
+        tzdata \
     && curl -sS https://bootstrap.pypa.io/get-pip.py | python3 \
     && rm -rf /var/lib/apt/lists/*
 
@@ -28,6 +29,7 @@ ENV DATA_DIR=/data
 ENV MODEL_CACHE=/data/model_cache
 ENV EMBEDDING_MODEL=all-MiniLM-L6-v2
 ENV PORT=33333
+ENV TZ=Asia/Shanghai
 
 EXPOSE 33333
 
