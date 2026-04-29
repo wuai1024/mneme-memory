@@ -50,6 +50,7 @@ def test_update_fact(fact_id):
     headers = {"X-API-Key": API_KEY, "Content-Type": "application/json"}
     data = {"object": "北京"}
     response = requests.put(f"{BASE_URL}/facts/{fact_id}", headers=headers, json=data)
+    print(f"Update response: {response.status_code} - {response.text}")
     assert response.status_code == 200
     result = response.json()
     assert result["object"] == "北京"
