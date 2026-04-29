@@ -516,9 +516,8 @@ def _keyword_search(req: SearchRequest) -> SearchResponse:
     # Search facts
     cur.execute("""
         SELECT f.* FROM facts f
-        JOIN facts_fts fts ON f.id = fts.id
-        WHERE facts_fts MATCH ?
-        ORDER BY rank
+        WHERE f.id IN (SELECT id FROM facts_fts WHERE facts_fts MATCH ?)
+        ORDER BY f.created_at DESC
         LIMIT ?
     """, (req.query, req.top_k))
     fact_rows = cur.fetchall()
@@ -526,9 +525,8 @@ def _keyword_search(req: SearchRequest) -> SearchResponse:
     # Search summaries
     cur.execute("""
         SELECT s.* FROM summaries s
-        JOIN summaries_fts fts ON s.id = fts.id
-        WHERE summaries_fts MATCH ?
-        ORDER BY rank
+        WHERE s.id IN (SELECT id FROM summaries_fts WHERE summaries_fts MATCH ?)
+        ORDER BY s.created_at DESC
         LIMIT ?
     """, (req.query, req.top_k))
     summary_rows = cur.fetchall()
