@@ -21,7 +21,8 @@ RUN pip install --no-cache-dir \
         "sentence-transformers>=3.0" \
         "fastapi>=0.115" \
         "uvicorn[standard]>=0.30" \
-        "pydantic>=2.0"
+        "pydantic>=2.0" \
+        "numpy>=1.24"
 
 COPY app/ ./app/
 
@@ -30,6 +31,7 @@ ENV MODEL_CACHE=/data/model_cache
 ENV EMBEDDING_MODEL=all-MiniLM-L6-v2
 ENV PORT=33333
 ENV TZ=Asia/Shanghai
+ENV CORS_ORIGINS=*
 
 EXPOSE 33333
 
