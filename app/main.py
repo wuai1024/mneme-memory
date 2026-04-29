@@ -491,7 +491,8 @@ def _semantic_search(req: SearchRequest) -> SearchResponse:
             facts.append(FactResponse(
                 id=r["id"], subject=r["subject"], predicate=r["predicate"], object=r["object"],
                 created_at=r["created_at"], updated_at=r["updated_at"],
-                metadata=json.loads(r["metadata"] or "{}")
+                metadata=json.loads(r["metadata"] or "{}"),
+                score=item.get("score", 0.0)
             ))
 
     summaries = []
@@ -502,7 +503,8 @@ def _semantic_search(req: SearchRequest) -> SearchResponse:
             summaries.append(SummaryResponse(
                 id=r["id"], conversation_id=r["conversation_id"], content=r["content"],
                 created_at=r["created_at"], updated_at=r["updated_at"],
-                metadata=json.loads(r["metadata"] or "{}")
+                metadata=json.loads(r["metadata"] or "{}"),
+                score=item.get("score", 0.0)
             ))
 
     return SearchResponse(facts=facts, summaries=summaries)

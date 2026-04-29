@@ -24,6 +24,7 @@ class FactResponse(BaseModel):
     created_at: str
     updated_at: str
     metadata: dict = {}
+    score: float = 0.0
 
 
 class BatchFactCreate(BaseModel):
@@ -47,6 +48,7 @@ class SummaryResponse(BaseModel):
     created_at: str
     updated_at: str
     metadata: dict = {}
+    score: float = 0.0
 
 
 class BatchSummaryCreate(BaseModel):
